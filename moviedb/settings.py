@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'YourSecretKeyGoesHere'
 
 # OMDB API KEY:
-API_KEY = '163bf16a'
+API_KEY = ''
 
 DEBUG = False
 
