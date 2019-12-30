@@ -8,7 +8,7 @@ SECRET_KEY = 'YourSecretKeyGoesHere'
 # OMDB API KEY:
 API_KEY = '163bf16a'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,5 +88,9 @@ USE_L10N = True
 
 USE_TZ = False
 
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)

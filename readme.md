@@ -1,4 +1,11 @@
 ### Live preview:
+http://decathlontaskbk.herokuapp.com/
+
+Three endpoints are available:
+
+- /api/movies
+- /api/comments
+- /api/top
 
 ### Setup:
 
@@ -27,9 +34,3 @@ Your website will be available under
 ```
 http://localhost:8000/
 ```
-
-Three endpoints are available:
-
-- /api/movies
-- /api/comments
-- /api/top
