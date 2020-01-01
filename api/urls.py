@@ -5,8 +5,7 @@ from rest_framework.routers import DefaultRouter
 from api.views import MovieViewSet
 
 router = DefaultRouter()
-router.register(r'movies', MovieViewSet)
-
+router.register(r'movies', MovieViewSet, basename='movies')
 urlpatterns = [
     path('comments/', views.CommentAPIView.as_view(), name='comments'),
     path('top/', views.TopAPIView.as_view(), name='top'),

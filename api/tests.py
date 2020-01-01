@@ -1,13 +1,15 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.test import Client
 from unittest import mock
-from api.models import Movie, Comment, Rating
+
+from rest_framework.test import APIClient
+
+from api.models import Movie, Comment
 
 
 class APITests(TestCase):
     def setUp(self):
-        self.client = Client()
+        self.client = APIClient()
         self.movie = Movie.objects.create(title="TestTitle")
 
     def _mock_response(self):
@@ -77,9 +79,24 @@ class APITests(TestCase):
         mock_resp.json = mock.Mock(return_value=json_data)
         return mock_resp
 
-    def test_movies_endpoint_get(self):
-        r = self.client.get(reverse('movies'))
+    def test_movies_list_endpoint(self):
+        r = self.client.get(reverse('movies-list'))
         self.assertEqual(r.status_code, 200)
+
+    def test_movies_detail_endpoint(self):
+        r = self.client.get(reverse('movies-detail', kwargs={'pk': self.movie.pk}))
+        self.assertEqual(r.status_code, 200)
+
+    def test_movies_update_endpoint(self):
+        r = self.client.put(reverse('movies-detail', kwargs={'pk': self.movie.pk}),
+                            {'title': 'namechanged'})
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(Movie.objects.first().title, 'namechanged')
+
+    def test_movies_delete_endpoint(self):
+        r = self.client.delete(reverse('movies-detail', kwargs={'pk': self.movie.pk}))
+        self.assertEqual(Movie.objects.count(), 0)
+        self.assertEqual(r.status_code, 204)
 
     def test_comments_endpoint_get(self):
         r = self.client.get(reverse('comments'))
@@ -90,16 +107,15 @@ class APITests(TestCase):
         self.assertEqual(r.status_code, 200)
 
     @mock.patch('requests.get')
-    def test_movies_endpoint_post(self, mock_get):
+    def test_movies_create_endpoint(self, mock_get):
         mock_resp = self._mock_response()
         mock_get.return_value = mock_resp
         movies_count = Movie.objects.count()
-        r = self.client.post(reverse('movies'), {"title": "Test"})
+        r = self.client.post(reverse('movies-list'), {"title": "Test"})
         self.assertEqual(r.status_code, 200)
         self.assertEqual(Movie.objects.count(), movies_count + 1)
-        self.assertEqual(Rating.objects.all().count(), 3)
 
-    def test_comment_endpoint_post(self):
+    def test_comment_create_endpoint(self):
         comments_count = Comment.objects.count()
         r = self.client.post(reverse('comments'),
                              {"movie": self.movie.pk, "content": "test"})
@@ -107,6 +123,6 @@ class APITests(TestCase):
         self.assertEqual(Comment.objects.last().movie.comments_count, 1)
         self.assertEqual(r.status_code, 201)
 
-    def test_top_endpoint_get(self):
+    def test_top_list_endpoint(self):
         r = self.client.get(reverse('top'))
         self.assertEqual(r.status_code, 200)

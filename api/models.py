@@ -140,17 +140,3 @@ class Comment(TimestampAbstractModel):
 
     def __str__(self):
         return self.movie.title
-
-
-class Rating(TimestampAbstractModel):
-    """
-    Holds Rankings, FK to Movie
-    """
-    movie = models.ForeignKey(Movie,
-                              on_delete=models.CASCADE,)
-    source = models.CharField(_("Source"),
-                              max_length=200,
-                              )
-    value = models.CharField(_("Value"),
-                             max_length=100
-                             )

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Movie, Comment, Rating
+from .models import Movie, Comment
 
 
 class MovieAdmin(admin.ModelAdmin):
@@ -16,11 +16,3 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Comment, CommentAdmin)
-
-
-class RatingAdmin(admin.ModelAdmin):
-    list_display = [field.attname for field in
-                    Rating._meta.fields if field.attname != "id"]
-
-
-admin.site.register(Rating, RatingAdmin)
