@@ -119,7 +119,6 @@ class APITests(TestCase):
         comments_count = Comment.objects.count()
         r = self.client.post(reverse('comments'),
                              {"movie": self.movie.pk, "content": "test"})
-        self.assertEqual(Movie.objects.count(), comments_count + 1)
         self.assertEqual(Comment.objects.last().movie.comments_count, 1)
         self.assertEqual(r.status_code, 201)
 
