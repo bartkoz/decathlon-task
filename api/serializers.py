@@ -19,16 +19,13 @@ class CommentSerializer(serializers.ModelSerializer):
 class TopSerializer(serializers.ModelSerializer):
 
     order = serializers.SerializerMethodField()
-    movie_id = serializers.SerializerMethodField()
+    movie_id = serializers.IntegerField(source='id')
     rank = 0
     last_comment_count = 0
 
     class Meta:
         model = Movie
         fields = ('movie_id', 'comments_count', 'order')
-
-    def get_movie_id(self, obj):
-        return obj.id
 
     def get_order(self, obj):
         # qs is ordered by comments count if == 0
